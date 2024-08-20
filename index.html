@@ -20,16 +20,16 @@
     <img id="logo" src="logo.png" alt="לוגו מתי״א בני-ברק">
     <h1>תכנון חודשי ודיווח נוכחות</h1>
 
-    <form id="attendanceForm">
+    <form id="attendanceForm" action="https://formsubmit.co/matyabbworkers@gmail.com" method="POST">
         <h2>פרטי עובד</h2>
         <label for="name">שם:</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="שם" required>
         
         <label for="id">ת"ז:</label>
-        <input type="text" id="id" name="id" required>
+        <input type="text" id="id" name="תעודת_זהות" required>
         
         <label for="position">תפקיד בצוות:</label>
-        <input type="text" id="position" name="position" required>
+        <input type="text" id="position" name="תפקיד" required>
 
         <h2>תכנון לחודש הבא</h2>
         <div id="calendar">
@@ -43,14 +43,17 @@
 
         <h2>דיווח על היעדרויות</h2>
         <label for="absenceDates">האם נעדרת החודש מהעבודה? באלו תאריכים?</label>
-        <input type="text" id="absenceDates" name="absenceDates">
+        <input type="text" id="absenceDates" name="תאריכי_היעדרות">
 
         <label for="absenceFiles">העלאת אישורים (כגון אישורי מחלה):</label>
-        <input type="file" id="absenceFiles" name="absenceFiles" multiple>
+        <input type="file" id="absenceFiles" name="אישורי_היעדרות" multiple>
 
         <h2>דיווח על שעות נוספות</h2>
         <label for="overtimeDetails">האם עבדת החודש שעות נוספות? באלו תאריכים וכמה שעות?</label>
-        <textarea id="overtimeDetails" name="overtimeDetails" rows="4"></textarea>
+        <textarea id="overtimeDetails" name="פירוט_שעות_נוספות" rows="4"></textarea>
+
+        <input type="hidden" name="_subject" value="דיווח נוכחות חדש">
+        <input type="hidden" name="_template" value="table">
 
         <button type="submit">שלח דיווח</button>
     </form>
@@ -83,8 +86,19 @@
         // טיפול בשליחת הטופס
         document.getElementById('attendanceForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            // כאן צריך להוסיף קוד לשליחת הנתונים לשרת
-            alert('הטופס נשלח בהצלחה!');
+            // איסוף נתונים מלוחות השנה
+            const calendarData = {};
+            document.querySelectorAll('#calendar .day').forEach(day => {
+                const date = day.querySelector('div').textContent;
+                const plan = day.querySelector('textarea').value;
+                if (plan) {
+                    calendarData[date] = plan;
+                }
+            });
+            document.getElementById('calendarData').value = JSON.stringify(calendarData);
+
+            // שליחת הטופס
+            this.submit();
         });
     </script>
 </body>
