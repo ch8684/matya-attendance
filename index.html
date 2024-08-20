@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תכנון חודשי ודיווח נוכחות - מתי"א בני-ברק</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        #logo { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+        h1, h2 { text-align: center; }
+        form { margin-top: 20px; }
+        label { display: block; margin-top: 10px; }
+        input, textarea, select { width: 100%; padding: 5px; margin-top: 5px; }
+        button { margin-top: 20px; padding: 10px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        #calendar, #previousMonthCalendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 20px; }
+        .day { border: 1px solid #ccc; padding: 5px; min-height: 80px; }
+    </style>
+</head>
+<body>
+    <img id="logo" src="logo.png" alt="לוגו מתי״א בני-ברק">
+    <h1>תכנון חודשי ודיווח נוכחות</h1>
+
+    <form id="attendanceForm">
+        <h2>פרטי עובד</h2>
+        <label for="name">שם:</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="id">ת"ז:</label>
+        <input type="text" id="id" name="id" required>
+        
+        <label for="position">תפקיד בצוות:</label>
+        <input type="text" id="position" name="position" required>
+
+        <h2>תכנון לחודש הבא</h2>
+        <div id="calendar">
+            <!-- כאן ייווצר לוח השנה באמצעות JavaScript -->
+        </div>
+
+        <h2>משוב על החודש הקודם</h2>
+        <div id="previousMonthCalendar">
+            <!-- כאן יוצג התכנון מהחודש הקודם -->
+        </div>
+
+        <h2>דיווח על היעדרויות</h2>
+        <label for="absenceDates">האם נעדרת החודש מהעבודה? באלו תאריכים?</label>
+        <input type="text" id="absenceDates" name="absenceDates">
+
+        <label for="absenceFiles">העלאת אישורים (כגון אישורי מחלה):</label>
+        <input type="file" id="absenceFiles" name="absenceFiles" multiple>
+
+        <h2>דיווח על שעות נוספות</h2>
+        <label for="overtimeDetails">האם עבדת החודש שעות נוספות? באלו תאריכים וכמה שעות?</label>
+        <textarea id="overtimeDetails" name="overtimeDetails" rows="4"></textarea>
+
+        <button type="submit">שלח דיווח</button>
+    </form>
+
+    <script>
+        // פונקציה ליצירת לוח שנה
+        function createCalendar(elementId, year, month) {
+            const calendar = document.getElementById(elementId);
+            const date = new Date(year, month - 1, 1);
+            const daysInMonth = new Date(year, month, 0).getDate();
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day';
+                dayElement.innerHTML = `
+                    <div>${i}</div>
+                    <textarea placeholder="תכנון ליום זה"></textarea>
+                `;
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        // יצירת לוחות השנה בטעינת הדף
+        document.addEventListener('DOMContentLoaded', () => {
+            const now = new Date();
+            createCalendar('calendar', now.getFullYear(), now.getMonth() + 2); // החודש הבא
+            createCalendar('previousMonthCalendar', now.getFullYear(), now.getMonth() + 1); // החודש הנוכחי
+        });
+
+        // טיפול בשליחת הטופס
+        document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // כאן צריך להוסיף קוד לשליחת הנתונים לשרת
+            alert('הטופס נשלח בהצלחה!');
+        });
+    </script>
+</body>
+</html>
